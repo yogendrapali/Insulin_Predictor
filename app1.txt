@@ -1,0 +1,24 @@
+from flask import Flask,request,render_template
+from flask_cors import CORS,cross_origin
+import pickle
+import pandas as pd
+import numpy as np
+
+app=Flask(__name__)
+cors=CORS(app)
+model=pickle.load(open(r'C:\Users\dell\Documents\Insulin_Predictor\Type1final.pkl','rb'),encoding='utf-8')
+db=pd.read_csv(r'C:\Users\dell\Documents\Insulin_Predictor\Type1Diabetes.csv')
+
+@app.route('/')
+@cross_origin()
+def predict():
+
+    
+    #return render_template('hello.html')
+    return ('hello')
+
+
+if __name__=='__main__':
+    app.run()
+
+

@@ -1,0 +1,39 @@
+from flask import Flask, request, render_template, jsonify
+import pickle
+import pandas as pd
+import numpy as np
+
+app = Flask(__name__)
+
+model=pickle.load(open(r'C:\Users\dell\Documents\Insulin_Predictor\Type1final.pkl','rb'),encoding='utf-8')
+db=pd.read_csv(r'C:\Users\dell\Documents\Insulin_Predictor\Type1Diabetes.csv')
+
+@app.route("/")
+def hello_world():
+    return render_template('predict.html')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.get_json()
+    # Access the values using the keys
+    BP = data['BP']
+    BMI = data['BMI']
+    BGL = data['BGL']
+    HR = data['HR']
+    GEN = data['GEN']
+    MEAL = data['MEAL']
+
+    # Perform your prediction logic here
+
+    prediction = model.predict(pd.DataFrame(columns=['BP', 'BMI', 'BGL', 'HR', 'HR','GEN','MEAL'],
+                              data=np.array([BP,BMI,BGL,HR,GEN,MEAL]).reshape(1, 6)))
+    print(prediction)
+
+    #return str(np.round(prediction[0],2))
+
+
+    # Return the prediction as a JSON response
+    return jsonify({'prediction': prediction})
+
+if __name__ == '__main__':
+    app.run(debug=True)

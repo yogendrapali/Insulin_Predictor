@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TYPE 1 DIABETES PREDICTION</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+</head>
+<body class="bg-dark">
+<div class="container">
+    <div class="row">
+        <div class="card mt-50" style="width: 100%; height: 100%">
+            <div class="card-header" style="text-align: center">
+                <h1>WELCOME TO TYPE 1 DIABETES INSULIN PREDICTOR</h1>
+            </div>
+            <div class="card-body">
+                <div class="col-12" style="text-align: center">
+                    <h5>This Will Predict Insulin Requirements for Type 1 Diabetes Patients:</h5>
+                </div>
+                <br>
+                <div class="col-md-10 form-group" style="text-align: center">
+                    <label><b>Enter Blood Pressure:</b> </label><br>
+                    <input type="text" class="form-control" id="BP" name="BP"
+                           placeholder="Enter Blood Pressure">
+                </div>
+
+                <div class="col-md-10 form-group" style="text-align: center">
+                    <label><b>Enter Body Mass Index:</b> </label><br>
+                    <input type="text" class="form-control" id="BMI" name="BMI"
+                           placeholder="Enter Body Mass Index">
+                </div>
+
+                <div class="col-md-10 form-group" style="text-align: center">
+                    <label><b>Enter Blood Glucose Level:</b> </label><br>
+                    <input type="text" class="form-control" id="BGL" name="BGL"
+                           placeholder="Enter Blood Glucose Level">
+                </div>
+
+                <div class="col-md-10 form-group" style="text-align: center">
+                    <label><b>Enter Heart Rate:</b> </label><br>
+                    <input type="text" class="form-control" id="HR" name="HR"
+                           placeholder="Enter Heart Rate">
+                </div>
+
+                <div class="col-md-10 form-group" style="text-align: center">
+                    <label><b>Enter Genetics (Yes:1, No:0):</b> </label><br>
+                    <input type="text" class="form-control" id="GEN" name="GEN"
+                           placeholder="Enter Genetics (Yes:1, No:0)">
+                </div>
+
+                <div class="col-md-10 form-group" style="text-align: center">
+                    <label><b>Enter Meal Carbohydrates:</b> </label><br>
+                    <input type="text" class="form-control" id="MEAL" name="MEAL"
+                           placeholder="Enter Meal Carbohydrates">
+                </div>
+
+                <div class="col-md-10 form-group" style="text-align: center">
+                    <button class="btn btn-primary form-control" onclick="send_data()">Predict Insulin</button>
+                </div>
+
+                <br>
+                <div class="row">
+                    <div class="col-12" style="text-align: center">
+                        <h4>Predicted Insulin Requirements (ml): <span id="prediction"></span></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function send_data() {
+        var bp = parseFloat(document.getElementById('BP').value);
+        var bmi = parseFloat(document.getElementById('BMI').value);
+        var bgl = parseFloat(document.getElementById('BGL').value);
+        var hr = parseFloat(document.getElementById('HR').value);
+        var gen = parseInt(document.getElementById('GEN').value);
+        var meal = parseFloat(document.getElementById('MEAL').value);
+
+        var insulin_requirements = calculateInsulinRequirements(bp, bmi, bgl, hr, gen, meal);
+        document.getElementById('prediction').innerHTML = insulin_requirements.toFixed(2);
+    }
+
+    function calculateInsulinRequirements(bp, bmi, bgl, hr, gen, meal) {
+        var baselineInsulin =  10 // Set the baseline insulin value here
+        var targetGlucose =  100 // Set the target glucose level here
+        var insulinSensitivity =  0.5 // Set the insulin sensitivity factor here
+        var insulinCarbRatio = 2 // Set the insulin-to-carbohydrate ratio here
+        var geneticFactor =  1 // Set the genetic factor here
+
+        var insulinRequirements = baselineInsulin + (bgl - targetGlucose) * insulinSensitivity + meal * insulinCarbRatio + gen * geneticFactor;
+        return insulinRequirements;
+    }
+</script>
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3IpuThere were a few errors in the HTML code, which I have corrected. Here's the updated HTML code:
+</body>
+</html>    
